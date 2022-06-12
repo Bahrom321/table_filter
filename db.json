@@ -1,0 +1,143 @@
+{
+  "users": [
+      {
+          "id": 1,
+          "title": "Restaurant",
+          "amount": "80",
+          "distance":"100 km",
+          "type":"expensive"
+      },
+      {
+          "id": 2,
+          "title": "Fast Food",
+          "amount": "80",
+          "distance":"10 km",
+          "type":"expensive"
+      },
+      {
+          "id": 3,
+          "title": "Pizza",
+          "amount": "50",
+          "distance":"20 km",
+          "type":"average"
+      },
+      {
+          "id": 4,
+          "title": "Fast Food",
+          "amount": "40",
+          "distance":"60 km",
+          "type": "cheap"
+      },
+      {
+          "id": 5,
+          "title": "Restaurant",
+          "amount": "60",
+          "distance":"80 km",
+          "type":"average"
+      },
+      {
+          "id": 6,
+          "title": "Pizza",
+          "amount": "20",
+          "distance":"60 km",
+          "type": "cheap"
+      },
+      {
+          "id": 7,
+          "title": "Restaurant",
+          "amount": "80",
+          "distance":"110 km",
+          "type":"expensive"
+      },{
+          "id": 8,
+          "title": "Fast Food",
+          "amount": "80",
+          "distance":"90 km",
+          "type":"expensive"
+      },
+      {
+          "id": 9,
+          "title": "Pizza",
+          "amount": "30",
+          "distance":"40 km",
+          "type": "cheap"
+      },
+      {
+          "id": 10,
+          "title": "Fast Food",
+          "amount": "8",
+          "distance":"101 km",
+          "type": "cheap"
+      },
+      {
+          "id": 11,
+          "title": "Restaurant",
+          "amount": "70",
+          "distance":"50 km",
+          "type":"average"
+      },
+      {
+          "id": 12,
+          "title": "Pizza",
+          "amount": "80",
+          "distance":"60 km",
+          "type":"average"
+      },
+      {
+          "id": 13,
+          "title": "Fast Food",
+          "amount": "60",
+          "distance":"80 km",
+          "type":"average"
+      },
+      {
+          "id": 14,
+          "title": "Restaurant",
+          "amount": "40",
+          "distance":"70 km",
+          "type": "cheap"
+      },
+      {
+          "id": 15,
+          "title": "Restaurant",
+          "amount": "60",
+          "distance":"60 km",
+          "type":"average"
+      },
+      {
+          "id": 16,
+          "title": "Pizza",
+          "amount": "80",
+          "distance":"20 km",
+          "type":"expensive"
+      },
+      {
+          "id": 17,
+          "title": "Fast Food",
+          "amount": "10",
+          "distance":"50 km",
+          "type": "cheap"
+      },
+      {
+          "id": 18,
+          "title": "Fast Food",
+          "amount": "50",
+          "distance":"80 km",
+          "type":"average"
+      },
+      {
+          "id": 19,
+          "title": "Pizza",
+          "amount": "90",
+          "distance":"90 km",
+          "type":"expensive"
+      },
+      {
+          "id": 20,
+          "title": "Fast Food",
+          "amount": "80",
+          "distance":"100 km",
+          "type":"expensive"
+      }
+  ]
+}
