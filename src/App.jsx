@@ -7,66 +7,101 @@ const App = () => {
   const [sortValue, setSortValue] = useState("")
   const [currentPage, setCurrentPage] = useState(0)
   const [pageLimit] = useState(4)
+  const [sortFilterValue, setSortFilterValue] = useState("")
+  const [operation, setOperation] = useState("")
 
-  const sortOptions = ["title", "amount", "distance", "value"]
+  const sortOptions = ["title", "amount", "distance", "type"]
 
   useEffect(()=>{
     loadUserData(0, 4, 0)
   }, [])
 
-  const loadUserData = async (start, end, increas) => {
-    return await axios.get(`http://localhost:5000/users?_start=${start}&_end=${end}`)
-    .then((response)=> {
-      setData(response.data);
-      setCurrentPage(currentPage + increas)
-    })
-    .catch((err)=> console.log(err));
+  const loadUserData = async (start, end, increas, optType=null, filterOrSortValue) => {
+    switch (optType) {
+      case "search" :
+        setOperation(optType);
+        setSortValue("");
+          return await axios.get(`http://localhost:5000/users?q=${value}&_start=${start}&_end=${end}`)
+          .then((response)=> { 
+              setData(response.data);
+              setCurrentPage(currentPage + increas)
+            })
+
+          case "sort" :
+            setOperation(optType);
+            setSortFilterValue(filterOrSortValue);
+             return await axios
+             .get(`http://localhost:5000/users?_sort=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`)
+              .then((response)=> { 
+                  setData(response.data);
+                  setCurrentPage(currentPage + increas)
+                })
+          
+          case "filter" :
+            setOperation(optType);
+            setSortFilterValue(filterOrSortValue);
+             return await axios.get(`http://localhost:5000/users?type=${filterOrSortValue}&_order=asc&_start=${start}&_end=${end}`)
+              .then((response)=> { 
+                  setData(response.data);
+                  setCurrentPage(currentPage + increas)
+                })
+
+          default:
+            return await axios.get(`http://localhost:5000/users?_start=${start}&_end=${end}`)
+            .then((response)=> {
+              setData(response.data);
+              setCurrentPage(currentPage + increas)
+            })
+    }
   }
-  // console.log("data", data);
 
 
     //reset users
   const handleReset = () => {
-    loadUserData(0, 4, 0)
+    setOperation("");
+    setValue("");
+    setSortFilterValue("");
+    setSortValue("");
+    loadUserData(0, 4, 0);
   }
 
     //search users input
   const handleSearch = async (e) => {
-    e.preventDefault()
-    return await axios.get(`http://localhost:5000/users?q=${value}`)
-    .then((response)=> { 
-        setData(response.data);
-        setValue("")
-      })
-    .catch((err)=> console.log(err))
+    e.preventDefault();
+    loadUserData(0, 4, 0, "search")
+    // return await axios.get(`http://localhost:5000/users?q=${value}`)
+    // .then((response)=> { 
+    //     setData(response.data);
+    //     setValue("")
+    //   })
   }
 
   //select filter
   const handleSort = async (e) => {
     let value = e.target.value;
-    setSortValue(value)
-    return await axios.get(`http://localhost:5000/users?_sort=${value}&_order=asc`)
-    .then((response)=> { 
-        setData(response.data);
-      })
-    .catch((err)=> console.log(err))
+    loadUserData(0, 4, 0, "sort", value)
+    // return await axios.get(`http://localhost:5000/users?_sort=${value}&_order=asc`)
+    // .then((response)=> { 
+    //     setData(response.data);
+    //   })
   }
 
   //btn filter
   const handleFilter = async (value) => {
-    return await axios
-    .get(`http://localhost:5000/users?type=${value}`)
-    .then((response)=> { 
-        setData(response.data);
-      })
-    .catch((err)=> console.log(err))
+    loadUserData(0, 4, 0, "filter", value)
+    // return await axios
+    // .get(`http://localhost:5000/users?type=${value}`)
+    // .then((response)=> { 
+    //     setData(response.data);
+    //   })
   }
 
   const renderPagination = () => {
+    if(data.length < 4 && currentPage === 0) return null;
     if(currentPage === 0) {
       return(
       <div >
-          <button className='btn_Next' onClick={() =>  loadUserData(4, 8, 1)}>Next</button>
+          <button className='btn_Next' onClick={() =>  loadUserData(4, 8, 1, operation, sortFilterValue)}>Next</button>
           <span>1</span>
         
       </div>
@@ -74,16 +109,16 @@ const App = () => {
     } else if(currentPage < pageLimit - 1 && data.length === pageLimit) {
       return(
         <div >
-            <button className='btn_Prev'  onClick={() =>  loadUserData((currentPage -1) * 4, currentPage * 4, -1)}>Prev</button>
+            <button className='btn_Prev'  onClick={() =>  loadUserData((currentPage -1) * 4, currentPage * 4, -1, operation, sortFilterValue)}>Prev</button>
             <span>{currentPage +1}</span>
-            <button className='btn_Next' onClick={() =>  loadUserData((currentPage +1) * 4, (currentPage +2) * 4, 1)}>Next</button>
+            <button className='btn_Next' onClick={() =>  loadUserData((currentPage +1) * 4, (currentPage +2) * 4, 1, operation, sortFilterValue)}>Next</button>
         </div>
         )
     }
     else {
       return(
           <div >
-            <button className='btn_Prev' onClick={() =>  loadUserData(4, 8, -1)}>Prev</button>
+            <button className='btn_Prev' onClick={() =>  loadUserData((currentPage -1) *4, currentPage * 4, -1, operation, sortFilterValue)}>Prev</button>
             <span>{currentPage +1}</span>
           </div>
         )
@@ -101,7 +136,7 @@ const App = () => {
           <div className="search">
             <input 
               type="text" 
-              placeholder='Search...'  
+              placeholder='Search Name...'  
               value={value}
               onChange={(e) => setValue(e.target.value)}
               />
@@ -111,23 +146,24 @@ const App = () => {
               </div>
           </div>
       </form>
-      <div className="filter_btn">
-          <div className="#">
-              <button onClick={() => handleFilter("expensive")}>expensive</button>
-              <button onClick={() => handleFilter("cheap")}>cheap</button>
-              <button onClick={() => handleFilter("average")}>average</button>
-          </div>
-          {/* <div className=""> */}
-              <select onChange={handleSort} value={sortValue}>
-                    <option>Please Select Value</option>
-                    {sortOptions.map((item, index)=> (
-                    <option value={item} key={index}>
-                      {item}
-                    </option>
-                  ))}
-              </select>
-          {/* </div> */}
-      </div>
+      {data.length > 0 &&(
+        <div className="filter_btn">
+            <div className="#">
+                <button onClick={() => handleFilter("expensive")}>expensive</button>
+                <button onClick={() => handleFilter("cheap")}>cheap</button>
+                <button onClick={() => handleFilter("average")}>average</button>
+            </div>
+                <select onChange={handleSort} value={sortValue}>
+                      <option>Please Select Value</option>
+                      {sortOptions.map((item, index)=> (
+                      <option value={item} key={index}>
+                        {item}
+                      </option>
+                    ))}
+                </select>
+        </div>
+
+      )}
       <table className="table">
      <thead>
      	<tr>
